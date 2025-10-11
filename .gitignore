@@ -1,0 +1,93 @@
+# -----------------------------
+# Visual Studio / .NET
+# -----------------------------
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.ncrunch*
+*.localhistory
+*.dotCover
+
+# Build outputs
+bin/
+obj/
+out/
+
+# Publish outputs
+publish/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+.nuget/
+
+# Rider
+.idea/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# -----------------------------
+# Entity Framework Migrations
+# -----------------------------
+*.sql
+Migrations/*.Designer.cs
+Migrations/*.Snapshot.cs
+
+# -----------------------------
+# PostgreSQL / Database
+# -----------------------------
+*.db
+*.sql
+
+# -----------------------------
+# ASP.NET Core / Runtime
+# -----------------------------
+appsettings.*.json
+appsettings.local.json
+secrets.json
+*.pem
+*.pfx
+*.key
+
+# -----------------------------
+# Node / Angular (future front)
+# -----------------------------
+node_modules/
+dist/
+.angular/
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+logs/
+
+# -----------------------------
+# VS Code
+# -----------------------------
+.vscode/
+
+# -----------------------------
+# OS Generated
+# -----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -----------------------------
+# Optional: JetBrains IDEs
+# -----------------------------
+.idea/
+*.iml
+
+# -----------------------------
+# Others
+# -----------------------------
+*.swp

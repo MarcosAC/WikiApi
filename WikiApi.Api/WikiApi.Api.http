@@ -1,0 +1,6 @@
+@WikiApi.Api_HostAddress = http://localhost:5119
+
+GET {{WikiApi.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
