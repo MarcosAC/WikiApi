@@ -16,7 +16,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromBody] string? search, [FromQuery] string? tag)
+    public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? tag)
     {
         var listArticles = await _articleService.GetAllAsync(search, tag);
 
