@@ -39,7 +39,7 @@ public class ArticleControllerTests
     }
 
     [Fact]
-    public async Task GetAllReturnsArticlesList()
+    public async Task GetAll_ReturnsArticlesList()
     {
         var result = await _articlesController.GetAll(null, null) as OkObjectResult;
         var articles = result?.Value as IEnumerable<ArticleDto>;
@@ -49,7 +49,7 @@ public class ArticleControllerTests
     }
 
     [Fact]
-    public async Task GetByIdReturnsArticlesWhenExists()
+    public async Task GetById_ReturnsArticle_WhenExists()
     {
         var existingArticle = _wikiDbContext.Articles.First();
         var result = await _articlesController.GetById(existingArticle.Id) as OkObjectResult;
@@ -60,7 +60,7 @@ public class ArticleControllerTests
     }
 
     [Fact]
-    public async Task GeyByIdReturnsNotFoundWhenDoesNotExust()
+    public async Task GetById_ReturnsNotFound_WhenDoesNotExist()
     {
         var result = await _articlesController.GetById(999) as NotFoundResult;
 
@@ -68,7 +68,7 @@ public class ArticleControllerTests
     }
 
     [Fact]
-    public async Task CreateAddsArticleSucessfully()
+    public async Task Create_AddsArticleSuccessfully()
     {
         var request = new CreateArticleRequest(
             "New Article",
