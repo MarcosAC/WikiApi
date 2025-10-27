@@ -16,6 +16,8 @@ public class Article
         CreatedAt = DateTime.UtcNow;
     }
 
+    public Article() { }
+
     public void Update(string title, string content, string tags, string category)
     {
         if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Titulo é obrigatório");
