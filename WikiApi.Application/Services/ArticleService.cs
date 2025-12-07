@@ -1,6 +1,8 @@
 using WikiApi.Application.Interfaces;
 using WikiApi.Application.Dtos;
 using WikiApi.Domain.Entities;
+using WikiApi.Application.Mappers;
+using WikiApi.Application.Dtos.Responses;
 
 namespace WikiApi.Application.Services;
 
@@ -13,52 +15,27 @@ public class ArticleService
         _repository = repository;
     }
 
-    public async Task<IEnumerable<ArticleDto>> GetAllAsync(string? search = null, string? tag = null)
+    public async Task<IEnumerable<ArticleResponse>> GetAllAsync(string? search = null, string? tag = null)
     {
-        var list = await _repository.GetAllAsync(search, tag);
+        var articles = await _repository.GetAllAsync(search, tag);
 
-        return list.Select(article =>
-                            new ArticleDto(
-                                article.Id,
-                                article.Title,
-                                article.Content,
-                                article.Tags,
-                                article.Category,
-                                article.CreatedAt,
-                                article.UpdateAt
-                            ));
+        return articles.ToResponseList();
     }
 
-    public async Task<ArticleDto?> GetByIdAsync(int id)
+    public async Task<ArticleResponse?> GetByIdAsync(int id)
     {
         var article = await _repository.GetByIdAsync(id);
 
-        return article == null ? null : new ArticleDto(
-                                            article.Id,
-                                            article.Title,
-                                            article.Content,
-                                            article.Tags,
-                                            article.Category,
-                                            article.CreatedAt,
-                                            article.UpdateAt
-                                        );
+        return article?.ToResponse();
     }
 
-    public async Task<ArticleDto> CreateAsync(CreateArticleRequest request)
+    public async Task<ArticleResponse> CreateAsync(CreateArticleRequest request)
     {
         var article = new Article(request.Title, request.Content, request.Tags, request.Category);
 
         await _repository.AddAsync(article);
 
-        return new ArticleDto(
-                    article.Id,
-                    article.Title,
-                    article.Content,
-                    article.Tags,
-                    article.Category,
-                    article.CreatedAt,
-                    article.UpdateAt
-                );
+        return article.ToResponse();
     }
 
     public async Task UpdateAsync(UpdateArticleRequest request)
