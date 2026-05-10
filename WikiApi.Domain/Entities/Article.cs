@@ -20,9 +20,6 @@ public class Article
 
     public void Update(string title, string content, string tags, string category)
     {
-        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Titulo é obrigatório");
-        if (string.IsNullOrWhiteSpace(content)) throw new ArgumentException("Conteúdo é obrigatório");
-
         Title = title;
         Content = content;
         Tags = tags ?? string.Empty;

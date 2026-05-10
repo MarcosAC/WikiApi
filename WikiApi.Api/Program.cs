@@ -4,6 +4,8 @@ using WikiApi.Application.Interfaces;
 using WikiApi.Application.Services;
 using WikiApi.Infrastructure.Data;
 using WikiApi.Infrastructure.Repositories;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,14 @@ builder.Services.AddDbContext<WikiDbContext>(option => option.UseNpgsql(connecti
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ArticleService>();
 
+// Configuração do FluentValidation
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WikiApi.Application.Dtos;
 using WikiApi.Application.Services;
+using WikiApi.Application.Validators;
 
 namespace WikiApi.Api.Controllers;
 
@@ -34,6 +35,14 @@ public class ArticlesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateArticleRequest request)
     {
+        var validator = new CreateArticleRequestValidator();
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+        }
+
         var article = await _articleService.CreateAsync(request);
 
         return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
@@ -42,6 +51,14 @@ public class ArticlesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateArticleRequest request)
     {
+        var validator = new UpdateArticleRequestValidator();
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+        }
+
         if (id != request.Id) return BadRequest();
 
         await _articleService.UpdateAsync(request);
