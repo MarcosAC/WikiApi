@@ -15,7 +15,7 @@ public class TokenService : ITokenService
     {
         _configuration = configuration;
     }
-    public string GenerateToken(string userName, string role)
+    public async Task<string> GenerateTokenAsync(string userName, string role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!) ?? throw new ArgumentNullException("Jwt Key is missing");
