@@ -36,8 +36,7 @@ public class ArticleRepository : IArticleRepository
     public async Task<IEnumerable<Article>> GetAllAsync(string? search = null, string? tag = null)
     {
         var query = _context.Articles.AsQueryable();
-
-        // ILIKE usa provider Npgsql; aqui usamos Contains como fallback simples
+        
         if (!string.IsNullOrWhiteSpace(search))
         {
             query = query.Where(article => EF.Functions.ILike(article.Title, $"%{search}%") ||

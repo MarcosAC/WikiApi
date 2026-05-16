@@ -1,16 +1,18 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using WikiApi.Application.Interfaces;
-using WikiApi.Application.Services;
-using WikiApi.Infrastructure.Data;
-using WikiApi.Infrastructure.Repositories;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using WikiApi.Application.Interfaces;
+using WikiApi.Application.Interfaces.Repositories;
+using WikiApi.Application.Interfaces.Services;
+using WikiApi.Application.Services;
 using WikiApi.Domain.Interfaces.Services;
 using WikiApi.Domain.Services;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using WikiApi.Infrastructure.Data;
+using WikiApi.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,9 @@ builder.Services.AddDbContext<WikiDbContext>(option => option.UseNpgsql(connecti
 
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ArticleService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Configuração do FluentValidation
 builder.Services.AddControllers();

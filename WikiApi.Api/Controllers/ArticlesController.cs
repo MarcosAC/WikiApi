@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WikiApi.Application.Dtos;
 using WikiApi.Application.Services;
@@ -5,6 +6,7 @@ using WikiApi.Application.Validators;
 
 namespace WikiApi.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ArticlesController : ControllerBase
@@ -16,6 +18,7 @@ public class ArticlesController : ControllerBase
         _articleService = articleService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? tag)
     {
@@ -32,6 +35,7 @@ public class ArticlesController : ControllerBase
         return article == null ? NotFound() : Ok(article);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateArticleRequest request)
     {
@@ -48,6 +52,7 @@ public class ArticlesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateArticleRequest request)
     {
@@ -66,6 +71,7 @@ public class ArticlesController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

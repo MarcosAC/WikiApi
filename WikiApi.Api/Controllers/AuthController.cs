@@ -18,12 +18,13 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest login)
     {
-        if (login.UserName == "admin" && login.Password == "123456")
+        var token = await _tokenService.GenerateTokenAsync(login.UserName, login.Password);
+
+        if (token == null)
         {
-            var token = _tokenService.GenerateTokenAsync(login.UserName, "Admin");
-            return Ok(new { Token = token });
-        }    
-        
-        return Unauthorized();
+            return Unauthorized(new {message = "Usuário ou senha inválidos"});
+        }
+
+        return Ok(new { Token = token });
     }
 }
