@@ -18,6 +18,7 @@ namespace WikiApi.Application.Services
             _tokenService = tokenService;
             _passwordHasher = new PasswordHasher<User>();
         }
+
         public async Task<string?> AuthenticateAsync(string userName, string password)
         {
             var user = await _userRepository.GetByUserNameAsync(userName);
@@ -31,12 +32,13 @@ namespace WikiApi.Application.Services
             if (result == PasswordVerificationResult.SuccessRehashNeeded)
             {
                 var newHash = _passwordHasher.HashPassword(user, password);
+
                 user.UpdatePassword(newHash);
 
                 await _userRepository.UpdateAsync(user);
             }
 
-            return _tokenService.GenerateTokenAsync(user.UserName, password).Result;
+            return await _tokenService.GenerateTokenAsync(user.UserName, user.Role);
         }
     }
 }

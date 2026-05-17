@@ -27,6 +27,7 @@ public class ArticlesController : ControllerBase
         return Ok(listArticles);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -52,7 +53,7 @@ public class ArticlesController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]    
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateArticleRequest request)
     {
