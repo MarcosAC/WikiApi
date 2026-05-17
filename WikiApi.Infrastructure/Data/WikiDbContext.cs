@@ -8,6 +8,7 @@ public class WikiDbContext : DbContext
     public WikiDbContext(DbContextOptions<WikiDbContext> options) : base(options) { }
 
     public DbSet<Article> Articles { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
