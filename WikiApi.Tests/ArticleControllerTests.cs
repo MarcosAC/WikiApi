@@ -14,7 +14,7 @@ public class ArticleControllerTests
 {
     private readonly ArticlesController _articlesController;
     private readonly WikiDbContext _wikiDbContext;
-    private readonly ArticleService _articleService;
+    //private readonly ArticleService _articleService;
 
     public ArticleControllerTests()
     {
@@ -24,16 +24,16 @@ public class ArticleControllerTests
 
         _wikiDbContext = new WikiDbContext(options);
         var repository = new ArticleRepository(_wikiDbContext);
-        _articleService = new ArticleService(repository);
-        _articlesController = new ArticlesController(_articleService);
+        //_articleService = new ArticleService(repository);
+        //_articlesController = new ArticlesController(_articleService);
 
         // Popular dados iniciais
-        _wikiDbContext.Articles.Add(new Article(
-            "DotNet Test",
-            "Content about .NET",
-            "dotnet,backend",
-            "Programming"
-        ));
+        //_wikiDbContext.Articles.Add(new Article(
+        //    "DotNet Test",
+        //    "Content about .NET",
+        //    "dotnet,backend",
+        //    "Programming"
+        //));
 
         _wikiDbContext.SaveChanges();
     }

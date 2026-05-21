@@ -7,12 +7,14 @@ public class Article
     public string Content { get; private set; } = string.Empty;
     public string Tags { get; private set; } = string.Empty;
     public string Category { get; private set; } = string.Empty;
+    public string Author { get; private set; } = string.Empty;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     public DateTime UpdateAt { get; private set; }
 
-    public Article(string title, string content, string tags, string category)
+    public Article(string title, string content, string tags, string category, string author)
     {
         Update(title, content, tags, category);
+        Author = author;
         CreatedAt = DateTime.UtcNow;
     }
 

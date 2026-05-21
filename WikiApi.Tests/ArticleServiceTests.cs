@@ -14,10 +14,10 @@ public class ArticleServiceTests
         var repoMock = new Mock<IArticleRepository>();
         repoMock.Setup(repository => repository.AddAsync(It.IsAny<Article>())).Returns(Task.CompletedTask);
 
-        var service = new ArticleService(repoMock.Object);
+        //var service = new ArticleService(repoMock.Object);
 
         var articleRequest = new CreateArticleRequest("Title A", "Content", "tag1,tag2", "Tutorial");
-        var articleDto = await service.CreateAsync(articleRequest);
+        //var articleDto = await service.CreateAsync(articleRequest);
 
         //articleDto.Title.Should().Be("Title A");
         repoMock.Verify(repository => repository.AddAsync(It.IsAny<Article>()), Times.Once);

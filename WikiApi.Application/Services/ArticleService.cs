@@ -1,16 +1,20 @@
 using WikiApi.Application.Interfaces;
 using WikiApi.Application.Dtos;
 using WikiApi.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace WikiApi.Application.Services;
 
 public class ArticleService
 {
     private readonly IArticleRepository _repository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ArticleService(IArticleRepository repository)
+    public ArticleService(IArticleRepository repository, IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<IEnumerable<ArticleDto>> GetAllAsync(string? search = null, string? tag = null)
@@ -24,6 +28,7 @@ public class ArticleService
                                 article.Content,
                                 article.Tags,
                                 article.Category,
+                                article.Author,
                                 article.CreatedAt,
                                 article.UpdateAt
                             ));
@@ -37,8 +42,9 @@ public class ArticleService
                                             article.Id,
                                             article.Title,
                                             article.Content,
-                                            article.Tags,
+                                            article.Tags,                                            
                                             article.Category,
+                                            article.Author,
                                             article.CreatedAt,
                                             article.UpdateAt
                                         );
@@ -46,7 +52,14 @@ public class ArticleService
 
     public async Task<ArticleDto> CreateAsync(CreateArticleRequest request)
     {
-        var article = new Article(request.Title, request.Content, request.Tags, request.Category);
+        var autorName = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+
+        if (string.IsNullOrEmpty(autorName))
+        {
+            throw new UnauthorizedAccessException("Usuário não identificado no token.");
+        }
+
+        var article = new Article(request.Title, request.Content, request.Tags, request.Category, autorName);
 
         await _repository.AddAsync(article);
 
@@ -56,6 +69,7 @@ public class ArticleService
                     article.Content,
                     article.Tags,
                     article.Category,
+                    article.Author,
                     article.CreatedAt,
                     article.UpdateAt
                 );
