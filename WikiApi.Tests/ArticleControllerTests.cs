@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using System.Security.Claims;
 using WikiApi.Api.Controllers;
 using WikiApi.Application.Dtos;
 using WikiApi.Application.Services;
@@ -12,9 +15,12 @@ namespace WikiApi.Tests;
 
 public class ArticleControllerTests
 {
+    /*  Este teste de integração para o ArticlesController verifica se as operações CRUD 
+     *  estão funcionando corretamente com um banco de dados em memória. */
+
     private readonly ArticlesController _articlesController;
     private readonly WikiDbContext _wikiDbContext;
-    //private readonly ArticleService _articleService;
+    private readonly ArticleService _articleService;
 
     public ArticleControllerTests()
     {
@@ -24,16 +30,34 @@ public class ArticleControllerTests
 
         _wikiDbContext = new WikiDbContext(options);
         var repository = new ArticleRepository(_wikiDbContext);
-        //_articleService = new ArticleService(repository);
-        //_articlesController = new ArticlesController(_articleService);
 
-        // Popular dados iniciais
-        //_wikiDbContext.Articles.Add(new Article(
-        //    "DotNet Test",
-        //    "Content about .NET",
-        //    "dotnet,backend",
-        //    "Programming"
-        //));
+        // 1. Criamos o Mock do IHttpContextAccessor para o Controller/Service de teste
+        var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        var claims = new List<Claim> { new Claim(ClaimTypes.Name, "AdminUser") };
+        var identity = new ClaimsIdentity(claims, "TestAuthType");
+        var claimsPrincipal = new ClaimsPrincipal(identity);
+
+        var httpContext = new DefaultHttpContext { User = claimsPrincipal };
+        httpContextAccessorMock.Setup(accessor => accessor.HttpContext).Returns(httpContext);
+
+        // 2. Instanciamos o serviço passando o mock do contexto
+        _articleService = new ArticleService(repository, httpContextAccessorMock.Object);
+        _articlesController = new ArticlesController(_articleService);
+
+        // 3. Simula o contexto HTTP diretamente no Controller para validações internas de rota/user se houver
+        _articlesController.ControllerContext = new ControllerContext
+        {
+            HttpContext = httpContext
+        };
+
+        // CORREÇÃO: O construtor do Article agora pede o autor na semeadura de dados ("AdminUser")        
+        _wikiDbContext.Articles.Add(new Article(
+            "DotNet Test",
+            "Content about .NET",
+            "dotnet,backend",
+            "Programming",
+            "AdminUser"
+        ));
 
         _wikiDbContext.SaveChanges();
     }
