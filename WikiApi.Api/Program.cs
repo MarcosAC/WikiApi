@@ -108,6 +108,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
+// Permite acessar o HttpContext (e o usuário logado) de dentro dos serviços de aplicação
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 app.UseCors();
