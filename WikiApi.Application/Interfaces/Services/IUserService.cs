@@ -1,4 +1,4 @@
-﻿using WikiApi.Application.Dtos.Requests;
+﻿using WikiApi.Domain.Dtos.Requests;
 
 namespace WikiApi.Domain.Interfaces.Services;
 

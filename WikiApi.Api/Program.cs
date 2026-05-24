@@ -6,16 +6,17 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using WikiApi.Application.Interfaces;
-using WikiApi.Application.Interfaces.Repositories;
-using WikiApi.Application.Interfaces.Services;
-using WikiApi.Application.Services;
+using WikiApi.Domain.Interfaces;
+using WikiApi.Domain.Interfaces.Repositories;
 using WikiApi.Domain.Interfaces.Services;
 using WikiApi.Domain.Services;
 using WikiApi.Infrastructure.Data;
 using WikiApi.Infrastructure.Repositories;
+using WikiApi.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuração do CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -24,27 +25,41 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Configuração do Banco de Dados PostgreSQL
 var connection = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<WikiDbContext>(option => option.UseNpgsql(connection));
 
+// --- INJEÇÃO DE DEPENDÊNCIA (DI) ---
+
+// Repositórios (Infraestrutura implementando o Domínio)
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-builder.Services.AddScoped<ArticleService>();
+builder.Services.AddScoped<IArticleService>();
+
+// Serviços de Segurança / Infraestrutura Técnica
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Serviços de Aplicação (Casos de Uso)
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Configuração do FluentValidation
+// --- CONFIGURAÇÕES DO FRAMEWORK ASP.NET ---
+
 builder.Services.AddControllers();
+
+// Configuração do FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
 
 builder.Services.AddEndpointsApiExplorer();
+
+// Configuração do Swagger com suporte a Bearer Token
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -80,10 +95,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-// Registro do TokenService
-builder.Services.AddScoped<ITokenService, TokenService>();
-
-// Configuração da Autenticação
+// Configuração da Autenticação JWT
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
 builder.Services.AddAuthentication(options =>
 {
@@ -113,6 +125,8 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+// --- PIPELINE DE REQUISIÇÕES (MIDDLEWARES) ---
+
 app.UseCors();
 
 if (app.Environment.IsDevelopment()) { app.UseSwagger(); app.UseSwaggerUI(); }
@@ -122,4 +136,5 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
 app.Run();

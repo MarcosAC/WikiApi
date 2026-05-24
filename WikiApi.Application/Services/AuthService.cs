@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using WikiApi.Application.Interfaces.Repositories;
-using WikiApi.Application.Interfaces.Services;
+using WikiApi.Application.Interfaces;
 using WikiApi.Domain.Entities;
+using WikiApi.Domain.Interfaces.Repositories;
 using WikiApi.Domain.Interfaces.Services;
 
-namespace WikiApi.Application.Services
+namespace WikiApi.Domain.Services
 {
     public class AuthService : IAuthService
     {

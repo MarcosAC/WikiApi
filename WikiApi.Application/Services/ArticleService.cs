@@ -1,17 +1,17 @@
-using WikiApi.Application.Interfaces;
-using WikiApi.Application.Dtos;
+using WikiApi.Domain.Interfaces;
+using WikiApi.Domain.Dtos;
 using WikiApi.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace WikiApi.Application.Services;
+namespace WikiApi.Domain.Services;
 
-public class ArticleService
+public class IArticleService
 {
     private readonly IArticleRepository _repository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ArticleService(IArticleRepository repository, IHttpContextAccessor httpContextAccessor)
+    public IArticleService(IArticleRepository repository, IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _httpContextAccessor = httpContextAccessor;
