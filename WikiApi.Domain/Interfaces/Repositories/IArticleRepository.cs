@@ -1,6 +1,6 @@
 using WikiApi.Domain.Entities;
 
-namespace WikiApi.Application.Interfaces;
+namespace WikiApi.Domain.Interfaces;
 
 public interface IArticleRepository
 {

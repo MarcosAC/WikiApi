@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WikiApi.Application.Interfaces;
+using WikiApi.Domain.Interfaces;
 using WikiApi.Domain.Entities;
 using WikiApi.Infrastructure.Data;
 

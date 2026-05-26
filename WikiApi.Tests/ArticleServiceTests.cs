@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Security.Claims;
-using WikiApi.Application.Dtos;
-using WikiApi.Application.Interfaces;
-using WikiApi.Application.Services;
+using WikiApi.Domain.Dtos;
+using WikiApi.Domain.Interfaces;
+using WikiApi.Domain.Services;
 using WikiApi.Domain.Entities;
 using Xunit;
 
@@ -32,7 +32,7 @@ public class ArticleServiceTests
         httpContextAccessorMock.Setup(accessor => accessor.HttpContext).Returns(httpContext);
 
         // 3. Injeta ambos no serviço
-        var service = new ArticleService(repoMock.Object, httpContextAccessorMock.Object);
+        var service = new IArticleService(repoMock.Object, httpContextAccessorMock.Object);
 
         var articleRequest = new CreateArticleRequest("Title A", "Content", "tag1,tag2", "Tutorial");
 
