@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WikiApi.Domain.Dtos;
 using WikiApi.Domain.Services;
-using WikiApi.Domain.Validators;
-using WikiApi.Domain.Interfaces.Services;
 
 namespace WikiApi.Api.Controllers;
 
@@ -41,14 +39,6 @@ public class ArticlesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateArticleRequest request)
     {
-        //var validator = new CreateArticleRequestValidator();
-        //var validationResult = validator.Validate(request);
-
-        //if (!validationResult.IsValid)
-        //{
-        //    return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
-        //}
-
         var article = await _articleService.CreateAsync(request);
 
         return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
@@ -58,14 +48,6 @@ public class ArticlesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateArticleRequest request)
     {
-        //var validator = new UpdateArticleRequestValidator();
-        //var validationResult = validator.Validate(request);
-
-        //if (!validationResult.IsValid)
-        //{
-        //    return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
-        //}
-
         if (id != request.Id) return BadRequest(new { message = "O ID da URL não coincide com o ID do corpo da requisição." });
 
         await _articleService.UpdateAsync(request);
