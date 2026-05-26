@@ -1,4 +1,4 @@
-namespace WikiApi.Application.Dtos;
+namespace WikiApi.Domain.Dtos;
 
 public record ArticleDto(
     int Id, 

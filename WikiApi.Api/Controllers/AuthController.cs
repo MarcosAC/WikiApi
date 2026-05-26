@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WikiApi.Application.Dtos.Requests;
-using WikiApi.Application.Interfaces.Services;
+using WikiApi.Domain.Dtos.Requests;
 using WikiApi.Domain.Interfaces.Services;
 
 namespace WikiApi.Api.Controllers;

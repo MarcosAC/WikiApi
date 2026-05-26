@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WikiApi.Application.Interfaces.Repositories;
 using WikiApi.Domain.Entities;
+using WikiApi.Domain.Interfaces.Repositories;
 using WikiApi.Infrastructure.Data;
 
 namespace WikiApi.Infrastructure.Repositories;

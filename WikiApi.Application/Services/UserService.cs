@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using WikiApi.Application.Dtos.Requests;
-using WikiApi.Application.Interfaces.Repositories;
+using WikiApi.Domain.Dtos.Requests;
 using WikiApi.Domain.Entities;
+using WikiApi.Domain.Interfaces.Repositories;
 using WikiApi.Domain.Interfaces.Services;
 
-namespace WikiApi.Application.Services;
+namespace WikiApi.Domain.Services;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly PasswordHasher<string> _passwordHasher;
+    private readonly PasswordHasher<User> _passwordHasher;
 
     public UserService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-        _passwordHasher = new PasswordHasher<string>();
+        _passwordHasher = new PasswordHasher<User>();
     }
 
     public async Task<bool> RegisterAsync(RegisterRequest request)
@@ -28,7 +28,7 @@ public class UserService : IUserService
         var newUser = new User(request.UserName, "placeholder", request.Role);
 
         // Gerar o hash real e seguro a partir da senha em texto limpo
-        var secureHash = _passwordHasher.HashPassword(request.UserName, request.Password);
+        var secureHash = _passwordHasher.HashPassword(newUser, request.Password);
 
         newUser.UpdatePassword(secureHash);
 
