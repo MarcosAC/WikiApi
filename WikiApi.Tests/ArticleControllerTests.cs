@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Security.Claims;
 using WikiApi.Api.Controllers;
-using WikiApi.Domain.Dtos;
-using WikiApi.Domain.Services;
+using WikiApi.Application.Dtos.Requests;
+using WikiApi.Application.Services;
 using WikiApi.Domain.Entities;
 using WikiApi.Infrastructure.Data;
 using WikiApi.Infrastructure.Repositories;
@@ -20,7 +20,7 @@ public class ArticleControllerTests
 
     private readonly ArticlesController _articlesController;
     private readonly WikiDbContext _wikiDbContext;
-    private readonly IArticleService _articleService;
+    private readonly ArticleService _articleService;
 
     public ArticleControllerTests()
     {
@@ -41,7 +41,7 @@ public class ArticleControllerTests
         httpContextAccessorMock.Setup(accessor => accessor.HttpContext).Returns(httpContext);
 
         // 2. Instanciamos o serviço passando o mock do contexto
-        _articleService = new IArticleService(repository, httpContextAccessorMock.Object);
+        _articleService = new ArticleService(repository, httpContextAccessorMock.Object);
         _articlesController = new ArticlesController(_articleService);
 
         // 3. Simula o contexto HTTP diretamente no Controller para validações internas de rota/user se houver

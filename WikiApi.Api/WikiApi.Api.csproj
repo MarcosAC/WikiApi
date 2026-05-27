@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WikiApi.Application\WikiApi.Application.csproj" />
+    <ProjectReference Include="..\WikiApi.Domain\WikiApi.Domain.csproj" />
     <ProjectReference Include="..\WikiApi.Infrastructure\WikiApi.Infrastructure.csproj" />
   </ItemGroup>
 

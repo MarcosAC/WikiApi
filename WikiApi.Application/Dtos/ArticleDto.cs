@@ -1,4 +1,4 @@
-namespace WikiApi.Domain.Dtos;
+namespace WikiApi.Application.Dtos.Requests;
 
 public record ArticleDto(
     int Id, 
@@ -8,5 +8,5 @@ public record ArticleDto(
     string Category, 
     string Author, 
     DateTime CreatedAt,
-    DateTime? UpdateAt
+    DateTime? UpdatedAt
 );

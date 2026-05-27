@@ -1,3 +1,3 @@
-﻿namespace WikiApi.Domain.Dtos.Requests;
+﻿namespace WikiApi.Application.Dtos.Requests;
 
 public record LoginRequest(string UserName, string Password);

@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Security.Claims;
-using WikiApi.Domain.Dtos;
-using WikiApi.Domain.Interfaces;
-using WikiApi.Domain.Services;
+using WikiApi.Application.Dtos.Requests;
+using WikiApi.Application.Services;
 using WikiApi.Domain.Entities;
+using WikiApi.Domain.Interfaces.Repositories;
 using Xunit;
 
 public class ArticleServiceTests
@@ -16,7 +16,7 @@ public class ArticleServiceTests
      4. Asserções são feitas para verificar se o título do artigo retornado é correto, se o autor é o esperado e se o método AddAsync do repositório foi chamado exatamente uma vez.
      Este teste garante que a lógica de criação de artigos no ArticleService está funcionando conforme o esperado, incluindo a interação com o repositório e a obtenção do nome do autor a partir do contexto HTTP. */
     [Fact]
-    public async Task CreateAsuncShouldAddAticle()
+    public async Task CreateAsyncShouldAddAticle()
     {
         // 1. Moca o repositório
         var repoMock = new Mock<IArticleRepository>();
@@ -32,7 +32,7 @@ public class ArticleServiceTests
         httpContextAccessorMock.Setup(accessor => accessor.HttpContext).Returns(httpContext);
 
         // 3. Injeta ambos no serviço
-        var service = new IArticleService(repoMock.Object, httpContextAccessorMock.Object);
+        var service = new ArticleService(repoMock.Object, httpContextAccessorMock.Object);
 
         var articleRequest = new CreateArticleRequest("Title A", "Content", "tag1,tag2", "Tutorial");
 
@@ -41,7 +41,7 @@ public class ArticleServiceTests
 
         // Assert
         Assert.Equal("Title A", articleDto.Title);
-        Assert.Equal("TestAuthor", articleDto.Author);
+        Assert.Equal("TestAuthor", articleDto.AuthorName);
         repoMock.Verify(repository => repository.AddAsync(It.IsAny<Article>()), Times.Once);
     }
 }

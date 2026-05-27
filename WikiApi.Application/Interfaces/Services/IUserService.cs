@@ -1,6 +1,6 @@
-﻿using WikiApi.Domain.Dtos.Requests;
+﻿using WikiApi.Application.Dtos.Requests;
 
-namespace WikiApi.Domain.Interfaces.Services;
+namespace WikiApi.Application.Interfaces.Services;
 
 public interface IUserService
 {

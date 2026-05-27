@@ -9,7 +9,7 @@ public class Article
     public string Category { get; private set; } = string.Empty;
     public string Author { get; private set; } = string.Empty;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-    public DateTime UpdateAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
 
     public Article(string title, string content, string tags, string category, string author)
     {
@@ -26,6 +26,6 @@ public class Article
         Content = content;
         Tags = tags ?? string.Empty;
         Category = category ?? string.Empty;
-        UpdateAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

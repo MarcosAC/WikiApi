@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WikiApi.Domain.Dtos;
-using WikiApi.Domain.Services;
+using WikiApi.Application.Dtos.Requests;
+using WikiApi.Application.Interfaces.Services;
 
 namespace WikiApi.Api.Controllers;
 

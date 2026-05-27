@@ -1,4 +1,4 @@
-﻿namespace WikiApi.Domain.Interfaces.Services;
+﻿namespace WikiApi.Application.Interfaces.Services;
 
 public interface IAuthService
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WikiApi.Domain.Dtos;
+namespace WikiApi.Application.Dtos.Requests;
 
 public record UpdateArticleRequest(
     [Required] 
