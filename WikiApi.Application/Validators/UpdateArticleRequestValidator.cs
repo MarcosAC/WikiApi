@@ -1,7 +1,7 @@
 using FluentValidation;
-using WikiApi.Domain.Dtos;
+using WikiApi.Application.Dtos.Requests;
 
-namespace WikiApi.Domain.Validators;
+namespace WikiApi.Application.Validators;
 
 public class UpdateArticleRequestValidator : AbstractValidator<UpdateArticleRequest>
 {

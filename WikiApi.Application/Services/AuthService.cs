@@ -2,9 +2,9 @@
 using WikiApi.Application.Interfaces;
 using WikiApi.Domain.Entities;
 using WikiApi.Domain.Interfaces.Repositories;
-using WikiApi.Domain.Interfaces.Services;
+using WikiApi.Application.Interfaces.Services;
 
-namespace WikiApi.Domain.Services
+namespace WikiApi.Application.Services
 {
     public class AuthService : IAuthService
     {

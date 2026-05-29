@@ -1,56 +1,59 @@
-using WikiApi.Domain.Interfaces;
-using WikiApi.Domain.Dtos;
-using WikiApi.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using WikiApi.Application.Dtos.Requests;
+using WikiApi.Application.Dtos.Responses;
+using WikiApi.Application.Interfaces.Services;
+using WikiApi.Domain.Entities;
+using WikiApi.Domain.Interfaces.Repositories;
 
-namespace WikiApi.Domain.Services;
+namespace WikiApi.Application.Services;
 
-public class IArticleService
+public class ArticleService : IArticleService
 {
     private readonly IArticleRepository _repository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public IArticleService(IArticleRepository repository, IHttpContextAccessor httpContextAccessor)
+    public ArticleService(IArticleRepository repository, IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<IEnumerable<ArticleDto>> GetAllAsync(string? search = null, string? tag = null)
+    public async Task<IEnumerable<ArticleResponse>> GetAllAsync(string? search = null, string? tag = null)
     {
         var list = await _repository.GetAllAsync(search, tag);
 
-        return list.Select(article =>
-                            new ArticleDto(
-                                article.Id,
-                                article.Title,
-                                article.Content,
-                                article.Tags,
-                                article.Category,
-                                article.Author,
-                                article.CreatedAt,
-                                article.UpdateAt
-                            ));
+        return list.Select(static article => new ArticleResponse
+        {
+            Id = article.Id,
+            Title = article.Title,
+            Content = article.Content,
+            Tags = article.Tags,
+            CreatedAt = article.CreatedAt,
+            UpdatedAt = article.UpdatedAt,
+            AuthorName = article.Author
+        });
     }
 
-    public async Task<ArticleDto?> GetByIdAsync(int id)
+    public async Task<ArticleResponse?> GetByIdAsync(int id)
     {
         var article = await _repository.GetByIdAsync(id);
 
-        return article == null ? null : new ArticleDto(
-                                            article.Id,
-                                            article.Title,
-                                            article.Content,
-                                            article.Tags,                                            
-                                            article.Category,
-                                            article.Author,
-                                            article.CreatedAt,
-                                            article.UpdateAt
-                                        );
+        if (article == null) return null;
+
+        return new ArticleResponse
+        {
+            Id = article.Id,
+            Title = article.Title,
+            Content = article.Content,
+            Tags = article.Tags,
+            CreatedAt = article.CreatedAt,
+            UpdatedAt = article.UpdatedAt,
+            AuthorName = article.Author
+        };
     }
 
-    public async Task<ArticleDto> CreateAsync(CreateArticleRequest request)
+    public async Task<ArticleResponse> CreateAsync(CreateArticleRequest request)
     {
         var autorName = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
 
@@ -59,26 +62,30 @@ public class IArticleService
             throw new UnauthorizedAccessException("Usuário não identificado no token.");
         }
 
+        // Instancia a entidade de Domínio pura
         var article = new Article(request.Title, request.Content, request.Tags, request.Category, autorName);
 
         await _repository.AddAsync(article);
 
-        return new ArticleDto(
-                    article.Id,
-                    article.Title,
-                    article.Content,
-                    article.Tags,
-                    article.Category,
-                    article.Author,
-                    article.CreatedAt,
-                    article.UpdateAt
-                );
+        // Retorna o DTO correspondente
+        return new ArticleResponse
+        {
+            Id = article.Id,
+            Title = article.Title,
+            Content = article.Content,
+            Tags = article.Tags,
+            CreatedAt = article.CreatedAt,
+            UpdatedAt = article.UpdatedAt,
+            AuthorName = article.Author
+        };
     }
 
     public async Task UpdateAsync(UpdateArticleRequest request)
     {
-        var article = await _repository.GetByIdAsync(request.Id) ?? throw new KeyNotFoundException("Artigo não encontrado");
+        var article = await _repository.GetByIdAsync(request.Id)
+            ?? throw new KeyNotFoundException("Artigo não encontrado");
 
+        // Executa a regra de negócio de alteração dentro da própria entidade do domínio
         article.Update(request.Title, request.Content, request.Tags, request.Category);
 
         await _repository.UpdateAsync(article);
