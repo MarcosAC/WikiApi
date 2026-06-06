@@ -26,6 +26,13 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
+
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // URL do seu Angular
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 // Configuração do Banco de Dados PostgreSQL
@@ -126,7 +133,7 @@ var app = builder.Build();
 
 // --- PIPELINE DE REQUISIÇÕES (MIDDLEWARES) ---
 
-app.UseCors();
+app.UseCors("AllowAngular");
 
 if (app.Environment.IsDevelopment())
 {
